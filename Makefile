@@ -9,10 +9,10 @@ KERNEL_SOURCES=$(wildcard kernel/*.[chS])
 all: basekernel.iso
 
 run: basekernel.iso disk.img
-	qemu-system-i386 -cdrom basekernel.iso -hda disk.img
+	qemu-system-x86_64 -cdrom basekernel.iso -hda disk.img
 
 debug: basekernel.iso disk.img
-	qemu-system-i386 -cdrom basekernel.iso -hda disk.img -s -S &
+	qemu-system-x86_64 -cdrom basekernel.iso -hda disk.img -s -S &
 
 disk.img:
 	qemu-img create disk.img 10M
