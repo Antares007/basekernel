@@ -10,9 +10,9 @@ See the file LICENSE for details.
 #include "kernel/types.h"
 
 struct mouse_event {
-	uint8_t buttons;
-	int32_t x;
-	int32_t y;
+  uint8_t buttons;
+  int32_t x;
+  int32_t y;
 };
 
 void mouse_read(struct mouse_event *e);

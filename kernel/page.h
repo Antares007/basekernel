@@ -9,9 +9,9 @@ See the file LICENSE for details.
 
 #include "kernel/types.h"
 
-void  page_init();
+void page_init();
 void *page_alloc(bool zeroit);
-void  page_free(void *addr);
-void  page_stats( uint32_t *nfree, uint32_t *ntotal );
+void page_free(void *addr);
+void page_stats(uint32_t *nfree, uint32_t *ntotal);
 
 #endif

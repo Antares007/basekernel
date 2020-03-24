@@ -10,8 +10,8 @@ See the file LICENSE for details.
 #include "kernel/types.h"
 
 typedef struct {
-	uint32_t seconds;
-	uint32_t millis;
+  uint32_t seconds;
+  uint32_t millis;
 } clock_t;
 
 void clock_init();

@@ -13,8 +13,8 @@ See the file LICENSE for details.
 #include "device.h"
 
 struct ata_count {
-	int blocks_written[4];
-	int blocks_read[4];
+  int blocks_written[4];
+  int blocks_read[4];
 };
 
 void ata_init();

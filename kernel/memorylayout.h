@@ -21,9 +21,9 @@ The bootblock is loaded at the fixed address of 0x7c00,
 which is a constant defined by the PC hardware.
 */
 
-#define BOOTBLOCK_START   0x7c00
+#define BOOTBLOCK_START 0x7c00
 #define BOOTBLOCK_SEGMENT 0x07c0
-#define BOOTBLOCK_OFFSET  0x0000
+#define BOOTBLOCK_OFFSET 0x0000
 
 /*
 We choose the initial stack to start at 0xfff0 and grow
@@ -31,18 +31,18 @@ downward.  This stack location is used in the startup code,
 and by the kernel when no process is active.
 */
 
-#define INTERRUPT_STACK_TOP     0xfff0
+#define INTERRUPT_STACK_TOP 0xfff0
 #define INTERRUPT_STACK_SEGMENT 0x0000
-#define INTERRUPT_STACK_OFFSET  0xfff0
+#define INTERRUPT_STACK_OFFSET 0xfff0
 
 /*
 We choose the kernel code to start at 0x10000 (64KB).
 Code is loaded into this location by the bootblock.
 */
 
-#define KERNEL_START   0x10000
+#define KERNEL_START 0x10000
 #define KERNEL_SEGMENT 0x1000
-#define KERNEL_OFFSET  0x0000
+#define KERNEL_OFFSET 0x0000
 
 /*
 The total size of the kernel (in bytes) is stored at this
@@ -58,7 +58,7 @@ set aside for kmalloc() which implements a list of small
 memory allocations for internal kernel purposes.
 */
 
-#define KMALLOC_START  0x100000
+#define KMALLOC_START 0x100000
 #define KMALLOC_LENGTH 0x100000
 
 /*
@@ -68,7 +68,7 @@ be consumed by either the kernel or user processes.  The end of
 main memory is determined dynamically at bootup time.
 */
 
-#define MAIN_MEMORY_START  0x200000
+#define MAIN_MEMORY_START 0x200000
 
 /*
 We choose the user-mode address space to begin at 0x80000000,
@@ -77,4 +77,4 @@ grow down.  Addresses below 0x80000000 are all supervisor mode.
 */
 
 #define PROCESS_ENTRY_POINT 0x80000000
-#define PROCESS_STACK_INIT  0xfffffff0
+#define PROCESS_STACK_INIT 0xfffffff0

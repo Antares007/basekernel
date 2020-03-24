@@ -10,8 +10,8 @@ See the file LICENSE for details.
 #define FS_FILE_READ (1 << 0)
 #define FS_FILE_WRITE (1 << 1)
 
-#include "kernel/types.h"
 #include "device.h"
+#include "kernel/types.h"
 
 struct fs;
 struct fs_volume;
@@ -40,7 +40,7 @@ root directory entry with fs_volume_root.
 */
 
 int fs_volume_format(struct fs *f, struct device *d);
-struct fs_volume *fs_volume_open(struct fs *f, struct device *d );
+struct fs_volume *fs_volume_open(struct fs *f, struct device *d);
 struct fs_volume *fs_volume_addref(struct fs_volume *v);
 struct fs_dirent *fs_volume_root(struct fs_volume *vOB);
 int fs_volume_close(struct fs_volume *v);
@@ -55,14 +55,16 @@ struct fs_dirent *fs_dirent_traverse(struct fs_dirent *d, const char *path);
 struct fs_dirent *fs_dirent_mkdir(struct fs_dirent *d, const char *name);
 struct fs_dirent *fs_dirent_mkfile(struct fs_dirent *d, const char *name);
 struct fs_dirent *fs_dirent_addref(struct fs_dirent *d);
-int fs_dirent_read(struct fs_dirent *d, char *buffer, uint32_t length, uint32_t offset);
-int fs_dirent_write(struct fs_dirent *d, const char *buffer, uint32_t length, uint32_t offset);
+int fs_dirent_read(struct fs_dirent *d, char *buffer, uint32_t length,
+                   uint32_t offset);
+int fs_dirent_write(struct fs_dirent *d, const char *buffer, uint32_t length,
+                    uint32_t offset);
 int fs_dirent_list(struct fs_dirent *d, char *buffer, int buffer_length);
 int fs_dirent_remove(struct fs_dirent *d, const char *name);
-int fs_dirent_size(struct fs_dirent *d );
+int fs_dirent_size(struct fs_dirent *d);
 int fs_dirent_isdir(struct fs_dirent *d);
 int fs_dirent_close(struct fs_dirent *d);
-int fs_dirent_copy( struct fs_dirent *src, struct fs_dirent *dst, int depth );
+int fs_dirent_copy(struct fs_dirent *src, struct fs_dirent *dst, int depth);
 
 /*
 Register a new filesystem type, typically at system startup.
