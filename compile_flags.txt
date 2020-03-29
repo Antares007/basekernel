@@ -1,3 +1,5 @@
 -Iinclude
--std=c99
+-std=gnu99
 -Wall
+-Wno-pragma-pack
+-ffreestanding 
