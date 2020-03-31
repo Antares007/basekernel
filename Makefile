@@ -11,6 +11,9 @@ all: basekernel.iso
 run: basekernel.iso disk.img
 	qemu-system-x86_64 -cdrom basekernel.iso -hda disk.img
 
+bochs: basekernel.iso
+	bochs -f basekernel.bochs
+
 debug: basekernel.iso disk.img
 	qemu-system-x86_64 -cdrom basekernel.iso -hda disk.img -s -S &
 
