@@ -103,43 +103,24 @@ memdone:
 ;    D15    = 0 Clear display memory.
 ;    ES:DI  = Pointer to CRCTCInfoBlock structure.
 
-jmp video1024
-video1280:
+%macro setres 1
   mov ax, 0x4f02
-  mov bx, 0x411b
+  mov bx, word %1
   int 0x10
   cmp ax, 0x004f
   je videodone
-video1024:
-  mov ax, 0x4f02
-  mov bx, 0x4118
-  int 0x10
-  cmp ax, 0x004f
-  je videodone
-video800:
-  mov ax, 0x4f02
-  mov bx, 0x4115
-  int 0x10
-  cmp ax, 0x004f
-  je videodone
-video640:
-  mov ax, 0x4f02
-  mov bx, 0x4112
-  int 0x10
-  cmp ax, 0x004f
-  je videodone
-video640_lowcolor:
-  mov ax, 0x4f02
-  mov bx, 0x4111
-  int 0x10
-  cmp ax, 0x004f
-  je videodone
+%endmacro
 
+jmp video800
+video1280: setres 0x411b
+video1024: setres 0x4118
+video800: setres 0x4115
+video640: setres 0x4112
+video640_lowcolor: setres 0x4111
 videofailed:
   mov esi, videomsg
   call bios_putstring
   jmp halt
-
 videodone:
 
 ; After all that, query the video mode and
