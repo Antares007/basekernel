@@ -1,10 +1,10 @@
 include Makefile.config
 
-LIBRARY_SOURCES=$(wildcard library/*.c)
+LIBRARY_SOURCES=$(wildcard library/*.[cA])
 LIBRARY_HEADERS=$(wildcard library/*.h)
 USER_SOURCES=$(wildcard user/*.c)
 USER_PROGRAMS=$(USER_SOURCES:c=exe)
-KERNEL_SOURCES=$(wildcard kernel/*.[chS])
+KERNEL_SOURCES=$(wildcard kernel/*.[chA])
 
 all: basekernel.iso
 
@@ -21,13 +21,13 @@ disk.img:
 	qemu-img create disk.img 10M
 
 library/baselib.a: $(LIBRARY_SOURCES) $(LIBRARY_HEADERS)
-	cd library && make
+	make -C library
 
 $(USER_PROGRAMS): $(USER_SOURCES) library/baselib.a $(LIBRARY_HEADERS)
-	cd user && make
+	make -C user
 
 kernel/basekernel.img: $(KERNEL_SOURCES) $(LIBRARY_HEADERS)
-	cd kernel && make
+	make -C kernel
 
 image: kernel/basekernel.img $(USER_PROGRAMS)
 	rm -rf image
