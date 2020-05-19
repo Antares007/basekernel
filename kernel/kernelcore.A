@@ -40,7 +40,7 @@ realstart:
 
 ; Reset the disk system in order to quiet motors
 ; and turn off any pending interrupts.
-nop
+
   mov ah, 0
   int 0x13
 
@@ -262,12 +262,12 @@ halt:
 align 16
 global gdt
 gdt:
-  dw 0, 0, 0, 0                              ; seg 0 - null
+  dw 0, 0, 0, 0                           ; seg 0 - null
   dw 0xffff, 0x0000, 0x9a00, 0x00cf       ; seg 1 - kernel flat 4GB code
   dw 0xffff, 0x0000, 0x9200, 0x00cf       ; seg 2 - kernel flat 4GB data
   dw 0xffff, 0x0000, 0xfa00, 0x00cf       ; seg 3 - user flat 4GB code
   dw 0xffff, 0x0000, 0xf200, 0x00cf       ; seg 4 - user flat 4GB data
-  dw 0x0068, (tss-_start), 0x8901, 0x00cf  ; seg 5 - TSS
+  dw 0x0068, (tss-_start), 0x8901, 0x00cf ; seg 5 - TSS
 
 ; This is the initializer for the global descriptor table.
 ; It simply tells us the size and location of the table.
@@ -337,16 +337,16 @@ intr04: _{push 0}, {push  4}, {jmp intr_handler}
 intr05: _{push 0}, {push  5}, {jmp intr_handler}
 intr06: _{push 0}, {push  6}, {jmp intr_handler}
 intr07: _{push 0}, {push  7}, {jmp intr_handler}
-intr08: _{nop   }, {push  8}, {jmp intr_handler}
+intr08: _{      }, {push  8}, {jmp intr_handler}
 intr09: _{push 0}, {push  9}, {jmp intr_handler}
-intr10: _{nop   }, {push 10}, {jmp intr_handler}
-intr11: _{nop   }, {push 11}, {jmp intr_handler}
-intr12: _{nop   }, {push 12}, {jmp intr_handler}
-intr13: _{nop   }, {push 13}, {jmp intr_handler}
-intr14: _{nop   }, {push 14}, {jmp intr_handler}
+intr10: _{      }, {push 10}, {jmp intr_handler}
+intr11: _{      }, {push 11}, {jmp intr_handler}
+intr12: _{      }, {push 12}, {jmp intr_handler}
+intr13: _{      }, {push 13}, {jmp intr_handler}
+intr14: _{      }, {push 14}, {jmp intr_handler}
 intr15: _{push 0}, {push 15}, {jmp intr_handler}
 intr16: _{push 0}, {push 16}, {jmp intr_handler}
-intr17: _{nop   }, {push 17}, {jmp intr_handler}
+intr17: _{      }, {push 17}, {jmp intr_handler}
 intr18: _{push 0}, {push 18}, {jmp intr_handler}
 intr19: _{push 0}, {push 19}, {jmp intr_handler}
 
