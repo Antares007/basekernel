@@ -3,3 +3,4 @@
 -Wall
 -Wno-pragma-pack
 -ffreestanding
+-m32

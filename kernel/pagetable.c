@@ -48,55 +48,15 @@ void pagetable_init(struct pagetable *p) {
   }
 }
 
-int pagetable_getmap(struct pagetable *p, unsigned vaddr, unsigned *paddr,
-                     int *flags) {
-  struct pagetable *q;
-  struct pageentry *e;
-
-  unsigned a = vaddr >> 22;
-  unsigned b = (vaddr >> 12) & 0x3ff;
-
-  e = &p->entry[a];
-  if (!e->present)
-    return 0;
-
-  q = (struct pagetable *)(e->addr << 12);
-
-  e = &q->entry[b];
-  if (!e->present)
-    return 0;
-
-  *paddr = e->addr << 12;
-
-  if (flags) {
-    *flags = 0;
-    if (e->readwrite)
-      *flags |= PAGE_FLAG_READWRITE;
-    if (e->avail & 0x01)
-      *flags |= PAGE_FLAG_ALLOC;
-    if (!e->user)
-      *flags |= PAGE_FLAG_KERNEL;
-  }
-
-  return 1;
-}
-
-int pagetable_map(struct pagetable *p, unsigned vaddr, unsigned paddr,
+int pagetable_map(struct pagetable *p, const unsigned vaddr, unsigned paddr,
                   int flags) {
-  struct pagetable *q;
-  struct pageentry *e;
-
-  unsigned a = vaddr >> 22;
-  unsigned b = (vaddr >> 12) & 0x3ff;
-
   if (flags & PAGE_FLAG_ALLOC) {
     paddr = (unsigned)page_alloc(flags & PAGE_FLAG_CLEAR);
     if (!paddr)
       return 0;
   }
-
-  e = &p->entry[a];
-
+  struct pageentry *e = &p->entry[vaddr >> 22];
+  struct pagetable *q;
   if (!e->present) {
     q = pagetable_create();
     if (!q)
@@ -115,9 +75,7 @@ int pagetable_map(struct pagetable *p, unsigned vaddr, unsigned paddr,
   } else {
     q = (struct pagetable *)(((unsigned)e->addr) << 12);
   }
-
-  e = &q->entry[b];
-
+  e = &q->entry[(vaddr >> 12) & 0x3ff];
   e->present = 1;
   e->readwrite = (flags & PAGE_FLAG_READWRITE) ? 1 : 0;
   e->user = (flags & PAGE_FLAG_KERNEL) ? 0 : 1;
@@ -129,36 +87,46 @@ int pagetable_map(struct pagetable *p, unsigned vaddr, unsigned paddr,
   e->globalpage = !e->user;
   e->avail = (flags & PAGE_FLAG_ALLOC) ? 1 : 0;
   e->addr = (paddr >> 12);
+  return 1;
+}
 
+int pagetable_getmap(struct pagetable *p, unsigned vaddr, unsigned *paddr,
+                     int *flags) {
+  struct pageentry *e = &p->entry[vaddr >> 22];
+  if (!e->present)
+    return 0;
+  struct pagetable *q = (struct pagetable *)(e->addr << 12);
+  e = &q->entry[(vaddr >> 12) & 0x3ff];
+  if (!e->present)
+    return 0;
+  *paddr = e->addr << 12;
+  if (flags) {
+    *flags = 0;
+    if (e->readwrite)
+      *flags |= PAGE_FLAG_READWRITE;
+    if (e->avail & 0x01)
+      *flags |= PAGE_FLAG_ALLOC;
+    if (!e->user)
+      *flags |= PAGE_FLAG_KERNEL;
+  }
   return 1;
 }
 
 void pagetable_unmap(struct pagetable *p, unsigned vaddr) {
-  struct pagetable *q;
-  struct pageentry *e;
-
-  unsigned a = vaddr >> 22;
-  unsigned b = vaddr >> 12 & 0x3ff;
-
-  e = &p->entry[a];
+  struct pageentry *e = &p->entry[vaddr >> 22];
   if (e->present) {
-    q = (struct pagetable *)(e->addr << 12);
-    e = &q->entry[b];
+    struct pagetable *q = (struct pagetable *)(e->addr << 12);
+    e = &q->entry[vaddr >> 12 & 0x3ff];
     e->present = 0;
   }
 }
 
 void pagetable_delete(struct pagetable *p) {
-  unsigned i, j;
-
-  struct pageentry *e;
-  struct pagetable *q;
-
-  for (i = 0; i < ENTRIES_PER_TABLE; i++) {
-    e = &p->entry[i];
+  for (unsigned i = 0; i < ENTRIES_PER_TABLE; i++) {
+    struct pageentry *e = &p->entry[i];
     if (e->present) {
-      q = (struct pagetable *)(e->addr << 12);
-      for (j = 0; j < ENTRIES_PER_TABLE; j++) {
+      struct pagetable *q = (struct pagetable *)(e->addr << 12);
+      for (unsigned j = 0; j < ENTRIES_PER_TABLE; j++) {
         e = &q->entry[j];
         if (e->present && e->avail) {
           void *paddr;
@@ -169,7 +137,6 @@ void pagetable_delete(struct pagetable *p) {
       page_free(q);
     }
   }
-
   page_free(p);
 }
 
