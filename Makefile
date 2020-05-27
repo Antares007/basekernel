@@ -9,7 +9,7 @@ KERNEL_SOURCES=$(wildcard kernel/*.[chA])
 all: basekernel.iso
 
 run: basekernel.iso disk.img
-	qemu-system-x86_64 -cdrom basekernel.iso -hda disk.img
+	qemu-system-x86_64 -cdrom basekernel.iso -hda disk.img -serial stdio
 
 bochs: basekernel.iso
 	bochs -f basekernel.bochs
